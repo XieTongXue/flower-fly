@@ -1,2 +1,2 @@
-import FlowerFly './src/index'
-module.exports = FlowerFly
+import FlowerFly from './src/index'
+export default FlowerFly

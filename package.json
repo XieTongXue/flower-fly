@@ -1,0 +1,14 @@
+{
+  "name": "flower-fly",
+  "version": "1.0.1",
+  "description": "FlowerFly is a plugin which is created a Petal flying effects.",
+  "main": "index.js",
+  "directories": {
+    "examples": "examples"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "XieTongXue",
+  "license": "ISC"
+}

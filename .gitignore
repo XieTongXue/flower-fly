@@ -1,0 +1,9 @@
+.DS_Store
+dist/
+pkg
+*.swp
+docs/*
+public
+node_modules
+temp/
+npm-debug.log

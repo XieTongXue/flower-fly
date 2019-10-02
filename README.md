@@ -17,9 +17,11 @@ new FlowerFly(13, 'https://www.xxxx.xxx/xxx.png')
 ```
 
 ## Api(v1.1.0)
+```
 const flower = new FlowerFly(yourFlowerCount, yourFlowerUrl)
 flower.clear()
 flower.reStart() 
+```
 
 ## Developing
 ① cd flower-fly/examples

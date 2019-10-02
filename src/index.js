@@ -2,21 +2,30 @@ import Flower from './flower'
 import utils from './utils'
 export default class FlowerFly {
   constructor (flowerCount, imgUrl) {
+    this.flowerCount = flowerCount
     this.imgUrl = imgUrl
     this.start = true
+    this.listener = null
     this.removingFlower = false
-    this.createFlower(flowerCount)
+    this.init()
   }
-  init(a) {
+  init() {
     if (typeof window.onload != "function") {
-      window.onload = a
+      window.onload = () => {
+        this.createFlower(this.flowerCount)
+      }
     } else {
-      const b = window.onload;
-      window.onload = function() {
-        b()
-        a()
+      const preOnload = window.onload;
+      window.onload = () => {
+        preOnload()
+        this.createFlower(this.flowerCount)
       }
     }
+    this.addListener(window, "scroll", function() {
+      for (let e = this.flowers.length - 1; e >= 0; e--) {
+        this.flowers[e].draw()
+      }
+    })
   }
   addListener(target, event, callback) {
     if (target.addEventListener) {
@@ -25,54 +34,37 @@ export default class FlowerFly {
         target.attachEvent && target.attachEvent("on" + event, callback)
     }
   }
-
-  getClientHeight() {
-    const body = document.body 
-    let clientHeight
-    if (window.innerHeight) {
-      clientHeight = window.innerHeight;
-    } else if (body.parentElement.clientHeight) {
-      clientHeight = body.parentElement.clientHeight;
-    } else if (body && body.clientHeight) {
-      clientHeight = body.clientHeight;
-    }
-    return clientHeight
-  }
-  createFlower (flowerCount) {
-    if (this.start) {
-        let flowers = [];
-        const m = setInterval(() => {
-          if (!this.removingFlower && flowerCount > flowers.length && Math.random() < flowerCount * 0.0025) {
-            flowers.push(new Flower(this.imgUrl))
-          }
-          if (this.removingFlower && !flowers.length) {
-              clearInterval(m);
-          }
-          for (let pageYOffset = utils.getOffset().top, clientHeight = this.getClientHeight(), d = flowers.length - 1; d >= 0; d--) {
-              if (flowers[d]) {
-                  if (flowers[d].top < pageYOffset || flowers[d].top + flowers[d].size + 1 > pageYOffset + clientHeight) { // 到达屏幕底部，移除花瓣
-                      flowers[d].remove();
-                      flowers[d] = null;
-                      flowers.splice(d, 1)
-                  } else {
-                      flowers[d].move();
-                      flowers[d].draw()
-                  }
+  createFlower () {
+    this.flowers = []
+    this.listener = setInterval(() => {
+      if (this.flowerCount > this.flowers.length && Math.random() < this.flowerCount * 0.0025) {
+        this.flowers.push(new Flower(this.imgUrl))
+      }
+      let pageYOffset = utils.getOffset().top, clientHeight = utils.getClientHeight()
+      for (let index = this.flowers.length - 1; index >= 0; index--) {
+          if (this.flowers[index]) {
+              if (this.flowers[index].top < pageYOffset || this.flowers[index].top + this.flowers[index].size + 1 > pageYOffset + clientHeight) { // 到达屏幕底部，移除花瓣
+                this.flowers[index].remove();
+                this.flowers[index] = null;
+                this.flowers.splice(index, 1)
+              } else {
+                this.flowers[index].move();
+                this.flowers[index].draw()
               }
           }
-        }, 40)
-        this.addListener(window, "scroll", function() {
-            for (let e = flowers.length - 1; e >= 0; e--) {
-              flowers[e].draw()
-            }
-        })
-    } else {
-        this.init(function() {
-            createFlower(flowerCount)
-        })
-    }
+      }
+    }, 40)
   }
-  removeFlower () {
-    this.removingFlower = true
+  clear () {
+    if (!this.flowers || this.flowers.length === 0) {return}
+    for (let i = 0, length = this.flowers.length; i < length; i++) {
+      this.flowers[i].remove()
+    }
+    this.flowers = null
+    this.start = false
+    clearInterval(this.listener);
+  }
+  reStart () {
+    !this.start && this.createFlower()
   }
 }

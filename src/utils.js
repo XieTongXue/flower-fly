@@ -11,6 +11,18 @@ const utils = {
         }
     }
     return offset
+  },
+  getClientHeight() {
+    const body = document.body 
+    let clientHeight
+    if (window.innerHeight) {
+      clientHeight = window.innerHeight;
+    } else if (body.parentElement.clientHeight) {
+      clientHeight = body.parentElement.clientHeight;
+    } else if (body && body.clientHeight) {
+      clientHeight = body.clientHeight;
+    }
+    return clientHeight
   }
 }
 export default utils

@@ -2,22 +2,20 @@
 
 FlowerFly is a plugin which is created a Petal flying effects.
 
-## Install & Usage //last publish version: v1.0.2
+## Install & Usage
 
 ```
-$ npm install flower-fly -S
+npm install flower-fly -S
+import FlowerFly from 'flower-fly'
 
-① import FlowerFly from 'flower-fly'
+API:
+const flower = new FlowerFly(yourFlowerCount, yourFlowerUrl) 
+// new FlowerFly(13, 'https://www.xxxx.xxx/xxx.png')
 
-② new FlowerFly(yourFlowerCount, yourFlowerUrl)
-For example: 
-new FlowerFly(13, 'https://www.xxxx.xxx/xxx.png')
+flower.clear() // clear
+
+flower.reStart() // restart
 ```
-
-## Api(v1.1.0)
-const flower = new FlowerFly(yourFlowerCount, yourFlowerUrl)
-flower.clear()
-flower.reStart() 
 
 ## Developing
 ① cd flower-fly/examples
